@@ -1,21 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
+import React, {useState, useEffect} from 'react'
+import { View, Text } from 'react-native';
+import { Camera } from 'expo-camera';
+
+import RootNavigator from './components/RootNavigator'
+import styles from './styles';
+
+const App: React.FC = () => {
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  if (hasPermission === null) {
+      return <View />;
+  }
+  if (hasPermission === false) {
+      return (
+          <View style={styles.mainContainer}>
+              <Text>Sem acesso à camera</Text>
+          </View>
+      )
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <RootNavigator />
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App
+
