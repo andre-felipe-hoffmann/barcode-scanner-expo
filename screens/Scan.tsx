@@ -19,9 +19,6 @@ interface ScanScreenState {
 }
 
 const Scan: React.FC<ScanScreenProps> = ({ navigation }) => {  
-
-  const hasPermission = usePermission()
-
   const [
     state, 
     setState
@@ -78,18 +75,6 @@ const Scan: React.FC<ScanScreenProps> = ({ navigation }) => {
 
   const cameraWidth = Dimensions.get("window").width - 40
   const cameraHeight = Math.round((cameraWidth * 4) / 3)
-
-  if (hasPermission === null) {
-    return <View />;
-  }
-
-  if (hasPermission === false) {
-      return (
-          <View style={styles.mainContainer}>
-              <Text>Sem acesso à camera</Text>
-          </View>
-      )
-  }
 
   const barCodeTypes = [
     BarCodeScanner.Constants.BarCodeType.datamatrix,
